@@ -1,6 +1,6 @@
 # IOT_Credit
  A project for IOT class 
 
- #Frontend Vue
+ # Frontend Vue
 
- #Backend Flask
+ # Backend Flask
