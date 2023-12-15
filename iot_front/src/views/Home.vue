@@ -1,7 +1,7 @@
 <template>
-  <Credit />
+  <Landing></Landing>
 </template>
 
 <script setup>
-  import Credit from '@/components/Credit.vue'
+  import Landing from '@/components/Landing.vue'
 </script>

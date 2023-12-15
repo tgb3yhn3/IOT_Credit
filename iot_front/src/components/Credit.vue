@@ -1,9 +1,9 @@
 <template>
-  <v-card class="mx-auto" width="400" prepend-icon="mdi-home">
+  <v-card class="mx-auto" width="700" prepend-icon="mdi-home">
     <template v-slot:title> 信用評分系統 </template>
     <v-divider></v-divider>
     <v-card-text>
-      <v-form v-model="valid">
+      <v-form v-model="valid" @submit.prevent="submitForm" >
         <v-container>
           <v-row>
             <v-col cols="6" md="6">
@@ -110,13 +110,62 @@
             </v-col>
           </v-row>
         </v-container>
+        <v-btn type="submit" block class="mt-2" >Submit</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
 </template>
   
   <script>
+  import axios from 'axios';
 export default {
   data: () => ({}),
+  methods: {
+    submitForm: function () {
+      console.log("send_form");
+      var data = {
+        credit_ratio: this.credit_ratio,
+        age: this.age,
+        past_30_59: this.past_30_59,
+        income_ratio: this.income_ratio,
+        income: this.income,
+        current_credit_loan_case: this.current_credit_loan_case,
+        past_90: this.past_90,
+        current_mortgage_caseload: this.current_mortgage_caseload,
+        past_60_89: this.past_60_89,
+        famliy_member_num: this.famliy_member_num,
+      };
+      console.log(data);
+      axios
+        .post("http://127.0.0.1:5001/credit", data)
+        .then((res) => {
+          console.log(res.data);
+          this.$router.push({
+            path: "/advise",
+            query: {
+              credit_ratio: res.data.credit_ratio,
+              income_ratio: res.data.income_ratio,
+              income: res.data.income,
+              same_age_credit_ratio: res.data.same_age_credit_ratio,
+              same_age_income_ratio: res.data.same_age_income_ratio,
+              same_age_income: res.data.same_age_income,
+            },
+          });
+          // this.$router.push({
+          //   path: "/advise",
+          //   query: {
+          //     credit_ratio: res.data.credit_ratio,
+          //     income_ratio: res.data.income_ratio,
+          //     income: res.data.income,
+          //     same_age_credit_ratio: res.data.same_age_credit_ratio,
+          //     same_age_income_ratio: res.data.same_age_income_ratio,
+          //     same_age_income: res.data.same_age_income,
+          //   },
+          // });
+
+        })
+
+    },
+  },
 };
 </script>

@@ -17,16 +17,44 @@ const routes = [
     ],
   },
   {
-    path: '/main',
+    path: '/credit',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {
         path: '',
-        name: 'mainCredit',
+        name: 'credit',
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/mainCredit.vue'),
+        component: () => import('@/views/creditView.vue'),
+      },
+    ],
+  },
+  {
+    path: '/advise',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'advise',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/views/adviseView.vue'),
+      },
+    ],
+  },
+  {
+    path: '/report',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'report',
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import('@/views/reportView.vue'),
       },
     ],
   },
