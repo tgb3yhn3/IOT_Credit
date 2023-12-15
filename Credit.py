@@ -4,9 +4,19 @@ import lightgbm as lgb
 import matplotlib.pyplot as plt
 import seaborn as sns
 class Credit:
-    def __init__(self):
-        pass
-    def advice(customer_features,non_zero_features,good_customer_data):
+    def __init__(self,*arg):
+        features = ['RevolvingUtilizationOfUnsecuredLines', 'age', 'NumberOfTime30-59DaysPastDueNotWorse',
+            'DebtRatio', 'MonthlyIncome', 'NumberOfOpenCreditLinesAndLoans', 'NumberOfTimes90DaysLate',
+            'NumberRealEstateLoansOrLines', 'NumberOfTime60-89DaysPastDueNotWorse', 'NumberOfDependents']
+        self.user_input={}
+        for index,feature in enumerate(features):
+            value = arg[index][feature]
+            self.user_input[feature] = float(value)
+        self.new_input_data = pd.DataFrame([user_input])
+        self.advise=""
+    def add_advise(self,advise):
+        self.advise+=advise
+    def advice(self,customer_features,non_zero_features,good_customer_data):
 
         print("建議 : ")
         if non_zero_features.any().any():
@@ -21,7 +31,7 @@ class Credit:
             print(f"建議將當前信用貸款案件數量降低至 : {good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean()}以下")
 
 
-    def Draw_good_customer_plt(good_customer_data):
+    def Draw_good_customer_plt(self,good_customer_data):
     # 設定子圖
         features = ['RevolvingUtilizationOfUnsecuredLines', 'DebtRatio', 'MonthlyIncome','NumberOfOpenCreditLinesAndLoans']
 
@@ -54,7 +64,7 @@ class Credit:
         plt.tight_layout()
         plt.show()
 
-    def Draw_plt(combined_data):
+    def Draw_plt(self,combined_data):
     # 畫各年齡層的圖
         features_of_interest = ['RevolvingUtilizationOfUnsecuredLines', 'DebtRatio', 'MonthlyIncome','NumberOfOpenCreditLinesAndLoans']
 
@@ -81,7 +91,7 @@ class Credit:
         plt.show()
 
 
-    def DebtRatio_rank(customer_features,combined_data,same_age_data):
+    def DebtRatio_rank(self,customer_features,combined_data,same_age_data):
     #月支出收入比排名
         DebtRatio_rank_percentage = (((combined_data['DebtRatio'] < customer_features['DebtRatio'].values[0]).sum() + 1) / len(combined_data)) * 100
         same_age_DebtRatio_rank_percentage = (((same_age_data['DebtRatio'] < customer_features['DebtRatio'].values[0]).sum() + 1) / len(same_age_data)) * 100
@@ -89,7 +99,7 @@ class Credit:
         print(f"客戶在同年齡層的月支出收入比排名前: {same_age_DebtRatio_rank_percentage} %")
 
 
-    def RevolvingUtilizationOfUnsecuredLines_rank(customer_features,combined_data,same_age_data):
+    def RevolvingUtilizationOfUnsecuredLines_rank(self,customer_features,combined_data,same_age_data):
     #貸款信用比排名
         RevolvingUtilizationOfUnsecuredLines_rank_percentage = (((combined_data['RevolvingUtilizationOfUnsecuredLines'] < customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0]).sum() + 1) / len(combined_data)) * 100
         same_age_RevolvingUtilizationOfUnsecuredLines_rank_percentage = (((same_age_data['RevolvingUtilizationOfUnsecuredLines'] < customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0]).sum() + 1) / len(same_age_data)) * 100
@@ -97,14 +107,14 @@ class Credit:
         print(f"客戶在同年齡層的貸款信用比排名前: {same_age_RevolvingUtilizationOfUnsecuredLines_rank_percentage} %")
 
 
-    def MonthlyIncome_rank(customer_features,combined_data,same_age_data):
+    def MonthlyIncome_rank(self,customer_features,combined_data,same_age_data):
     #月收入排名
         MonthlyIncome_rank_percentage = 100 - ((((combined_data['MonthlyIncome'] < customer_features['MonthlyIncome'].values[0]).sum() + 1) / len(combined_data)) * 100)
         same_age_MonthlyIncome_rank_percentage = 100 - ((((same_age_data['MonthlyIncome'] < customer_features['MonthlyIncome'].values[0]).sum() + 1) / len(same_age_data)) * 100)
         print(f"客戶的月收入排名前: {MonthlyIncome_rank_percentage} %")
         print(f"客戶在同年齡層的月收入排名前: {same_age_MonthlyIncome_rank_percentage} %")
 
-    def customer_rank_percentage(user_input,threshold):
+    def customer_rank_percentage(self,user_input,threshold):
     # 所有資料
         train_data = pd.read_csv('cs-training.csv')
         test_data = pd.read_csv('cs-test.csv')
