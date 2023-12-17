@@ -1,14 +1,19 @@
 <template>
-  <v-navigation-drawer :width="200">
-  <v-list-item title="My Application" subtitle="Vuetify"></v-list-item>
-  <v-divider></v-divider>
-  <router-link to="Credit"><v-list-item link title="信用評分系統"></v-list-item> </router-link>
-  <v-list-item link title="List Item 2"></v-list-item>
-  <v-list-item link title="List Item 3"></v-list-item>
-</v-navigation-drawer>
-  
-</template>
 
+  
+ <v-tabs fixed-tabs  >
+  <!-- <v-app-bar ></v-app-bar> -->
+    <v-tab to="/"><v-icon>mdi-home</v-icon> Home</v-tab>
+    <v-tab to="/credit"><v-icon>mdi-credit-card-check</v-icon> 信用評估</v-tab>
+    <v-tab to="/advise"><v-icon>mdi-chart-bar</v-icon>評估報告</v-tab>
+    <v-tab to="/report"><v-icon>mdi-history</v-icon>歷史資料</v-tab>
+  </v-tabs>
+
+
+</template>
+<style scoped>
+
+</style>
 <script setup>
   //
 </script>

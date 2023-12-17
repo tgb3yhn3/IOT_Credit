@@ -30,10 +30,10 @@
             <v-row dense>
                 <v-col v-for="card in  cards " :key="card.title" :cols="card.flex" :variant="elevated">
                     <RouterLink :to="card.link">
-                        <v-card>
+                        <v-card  >
                             <v-img :src=card.src class="align-end" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                                 height="300px" cover>
-                                <v-card-title class="text-white" v-text="card.title"></v-card-title>
+                                <v-card-title  class="text-white" v-text="card.title" ></v-card-title>
                             </v-img>
 
 
@@ -57,6 +57,7 @@ export default {
                 src: credit_img,
                 flex: 12,
                 link: '/credit',
+                
             },
             {
                 title: '評估建議',

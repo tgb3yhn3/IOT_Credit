@@ -4,31 +4,41 @@ import lightgbm as lgb
 import matplotlib.pyplot as plt
 import seaborn as sns
 class Credit:
-    def __init__(self,*arg):
-        features = ['RevolvingUtilizationOfUnsecuredLines', 'age', 'NumberOfTime30-59DaysPastDueNotWorse',
-            'DebtRatio', 'MonthlyIncome', 'NumberOfOpenCreditLinesAndLoans', 'NumberOfTimes90DaysLate',
-            'NumberRealEstateLoansOrLines', 'NumberOfTime60-89DaysPastDueNotWorse', 'NumberOfDependents']
+    def __init__(self,arg):
+        self.train_data = pd.read_csv('data/cs-training.csv')
+        self.test_data = pd.read_csv('data/cs-test.csv')
+        self.result_data = pd.read_csv('data/result.csv')
+        features = ['RevolvingUtilizationOfUnsecuredLines',
+                    'age', 
+                    'NumberOfTime30-59DaysPastDueNotWorse',
+                    'DebtRatio',
+                    'MonthlyIncome', 
+                    'NumberOfOpenCreditLinesAndLoans', 
+                    'NumberOfTimes90DaysLate',
+                    'NumberRealEstateLoansOrLines', 
+                    'NumberOfTime60-89DaysPastDueNotWorse',
+                    'NumberOfDependents']
         self.user_input={}
         for index,feature in enumerate(features):
-            value = arg[index][feature]
+            value = arg[index]
             self.user_input[feature] = float(value)
-        self.new_input_data = pd.DataFrame([user_input])
-        self.advise=""
-    def add_advise(self,advise):
-        self.advise+=advise
+        self.new_input_data = pd.DataFrame([self.user_input])
+        self.advise_word={}
+    def add_advise(self,advise_word_input):
+        self.advise_word+=advise_word_input
     def advice(self,customer_features,non_zero_features,good_customer_data):
 
-        print("建議 : ")
+        self.advise_word["建議"]=[]
         if non_zero_features.any().any():
-            print(f"保持良好信用，消除不良紀錄")
+            self.advise_word["建議"].append(f"保持良好信用，消除不良紀錄")
         if customer_features['MonthlyIncome'].values[0] < good_customer_data['MonthlyIncome'].mean() :
-            print(f"建議將月收入提升至 : {good_customer_data['MonthlyIncome'].mean()}以上")
+            self.advise_word["建議"].append(f"建議將月收入提升至 : {good_customer_data['MonthlyIncome'].mean().__round__(2)}以上")
         if customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0] > good_customer_data['RevolvingUtilizationOfUnsecuredLines'].mean() :
-            print(f"建議將貸款信用比降低至 : {good_customer_data['RevolvingUtilizationOfUnsecuredLines'].mean()}以下")
+            self.advise_word["建議"].append(f"建議將貸款信用比降低至 : {good_customer_data['RevolvingUtilizationOfUnsecuredLines'].mean().__round__(2)}以下")
         if customer_features['DebtRatio'].values[0] > good_customer_data['DebtRatio'].mean() :
-            print(f"建議將月支出收入比降低至 : {good_customer_data['DebtRatio'].mean()}以下")
+            self.advise_word["建議"].append(f"建議將月支出收入比降低至 : {good_customer_data['DebtRatio'].mean().__round__(2)}以下")
         if customer_features['NumberOfOpenCreditLinesAndLoans'].values[0] > good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean() :
-            print(f"建議將當前信用貸款案件數量降低至 : {good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean()}以下")
+            self.advise_word["建議"].append(f"建議將當前信用貸款案件數量降低至 : {good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean().__round__(2)}以下")
 
 
     def Draw_good_customer_plt(self,good_customer_data):
@@ -95,96 +105,99 @@ class Credit:
     #月支出收入比排名
         DebtRatio_rank_percentage = (((combined_data['DebtRatio'] < customer_features['DebtRatio'].values[0]).sum() + 1) / len(combined_data)) * 100
         same_age_DebtRatio_rank_percentage = (((same_age_data['DebtRatio'] < customer_features['DebtRatio'].values[0]).sum() + 1) / len(same_age_data)) * 100
-        print(f"客戶的月支出收入比排名前: {DebtRatio_rank_percentage} %")
-        print(f"客戶在同年齡層的月支出收入比排名前: {same_age_DebtRatio_rank_percentage} %")
+        return DebtRatio_rank_percentage, same_age_DebtRatio_rank_percentage
 
 
     def RevolvingUtilizationOfUnsecuredLines_rank(self,customer_features,combined_data,same_age_data):
     #貸款信用比排名
         RevolvingUtilizationOfUnsecuredLines_rank_percentage = (((combined_data['RevolvingUtilizationOfUnsecuredLines'] < customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0]).sum() + 1) / len(combined_data)) * 100
         same_age_RevolvingUtilizationOfUnsecuredLines_rank_percentage = (((same_age_data['RevolvingUtilizationOfUnsecuredLines'] < customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0]).sum() + 1) / len(same_age_data)) * 100
-        print(f"客戶的貸款信用比排名前: {RevolvingUtilizationOfUnsecuredLines_rank_percentage} %")
-        print(f"客戶在同年齡層的貸款信用比排名前: {same_age_RevolvingUtilizationOfUnsecuredLines_rank_percentage} %")
+        return RevolvingUtilizationOfUnsecuredLines_rank_percentage, same_age_RevolvingUtilizationOfUnsecuredLines_rank_percentage
 
 
     def MonthlyIncome_rank(self,customer_features,combined_data,same_age_data):
     #月收入排名
         MonthlyIncome_rank_percentage = 100 - ((((combined_data['MonthlyIncome'] < customer_features['MonthlyIncome'].values[0]).sum() + 1) / len(combined_data)) * 100)
         same_age_MonthlyIncome_rank_percentage = 100 - ((((same_age_data['MonthlyIncome'] < customer_features['MonthlyIncome'].values[0]).sum() + 1) / len(same_age_data)) * 100)
-        print(f"客戶的月收入排名前: {MonthlyIncome_rank_percentage} %")
-        print(f"客戶在同年齡層的月收入排名前: {same_age_MonthlyIncome_rank_percentage} %")
+        return MonthlyIncome_rank_percentage, same_age_MonthlyIncome_rank_percentage
+
 
     def customer_rank_percentage(self,user_input,threshold):
     # 所有資料
-        train_data = pd.read_csv('cs-training.csv')
-        test_data = pd.read_csv('cs-test.csv')
-        result_data = pd.read_csv('result.csv')
+
 
         # 整理資料
         new_input_data = pd.DataFrame([user_input])
         combined_data = pd.concat([train_data, test_data])
         customer_features = pd.DataFrame([user_input],columns=combined_data.columns)
         same_age_data = combined_data[combined_data['age'] == customer_features['age'].values[0]]
-        bad_record_feature = ['NumberOfTime30-59DaysPastDueNotWorse', 'NumberOfTimes90DaysLate', 'NumberOfTime60-89DaysPastDueNotWorse']
-        non_zero_features = new_input_data[bad_record_feature].apply(lambda x: x != 0)
-        good_customer_data = result_data[result_data['Predicted_Probabilities'] < threshold]
+        
+        
 
         # 各項排名 (呵呵 寫超醜)
-        RevolvingUtilizationOfUnsecuredLines_rank(customer_features,combined_data,same_age_data)
-        DebtRatio_rank(customer_features,combined_data,same_age_data)
-        MonthlyIncome_rank(customer_features,combined_data,same_age_data)
+        self.RevolvingUtilizationOfUnsecuredLines_rank(customer_features,combined_data,same_age_data)
+        self.DebtRatio_rank(customer_features,combined_data,same_age_data)
+        self.MonthlyIncome_rank(customer_features,combined_data,same_age_data)
 
 
     # 列出不良紀錄
-        if non_zero_features.any().any():
-            print("不良紀錄:")
-            for feature in bad_record_feature:
-                if non_zero_features[feature].values[0]:
-                    print(f"{feature}: {int(user_input[feature])}")
-        else:
-            print("無不良紀錄")
-
-        # 改進建議
-        advice(customer_features,non_zero_features,good_customer_data)
+   
 
         # 畫各年齡層的圖
-        Draw_plt(combined_data)
+        self.Draw_plt(combined_data)
 
         # 畫優良用戶的圖
-        Draw_good_customer_plt(good_customer_data)
+        self.Draw_good_customer_plt(good_customer_data)
 
-# 把model load進來
-model = lgb.Booster(model_file='iot_lightgbm_model.txt')
 
-# 特徵
 
-features = ['RevolvingUtilizationOfUnsecuredLines', 'age', 'NumberOfTime30-59DaysPastDueNotWorse',
+    def customer_rank_percentage(self):
+        # 所有資料處理邏輯保持不變
+        user_input=self.user_input
+        threshold = 0.07403868112923592
+        model = lgb.Booster(model_file='data/iot_lightgbm_model.txt')
+        features = ['RevolvingUtilizationOfUnsecuredLines', 'age', 'NumberOfTime30-59DaysPastDueNotWorse',
             'DebtRatio', 'MonthlyIncome', 'NumberOfOpenCreditLinesAndLoans', 'NumberOfTimes90DaysLate',
             'NumberRealEstateLoansOrLines', 'NumberOfTime60-89DaysPastDueNotWorse', 'NumberOfDependents']
+        new_input_data = pd.DataFrame([user_input])
+        combined_data = pd.concat([self.train_data, self.test_data])  # 假設 train_data 和 test_data 已經定義
+        customer_features = pd.DataFrame([user_input], columns=combined_data.columns)
+        same_age_data = combined_data[combined_data['age'] == customer_features['age'].values[0]]
+        bad_record_feature = ['NumberOfTime30-59DaysPastDueNotWorse', 'NumberOfTimes90DaysLate', 'NumberOfTime60-89DaysPastDueNotWorse']
+        feature_chinese={'NumberOfTime30-59DaysPastDueNotWorse':'逾期30~59天','NumberOfTimes90DaysLate':'逾期超過90天','NumberOfTime60-89DaysPastDueNotWorse':'逾期60~89天'}
+        non_zero_features = new_input_data[bad_record_feature].apply(lambda x: x != 0)
+        good_customer_data = self.result_data[self.result_data['Predicted_Probabilities'] < threshold]
+        # 計算排名
+        RevolvingUtilization_rank, same_age_RevolvingUtilization_rank = self.RevolvingUtilizationOfUnsecuredLines_rank(customer_features, combined_data, same_age_data)
+        DebtRatio_rank, same_age_DebtRatio_rank = self.DebtRatio_rank(customer_features, combined_data, same_age_data)
+        MonthlyIncome_rank, same_age_MonthlyIncome_rank = self.MonthlyIncome_rank(customer_features, combined_data, same_age_data)
+        if non_zero_features.any().any():
+            self.advise_word["不良紀錄"]=[]
+            for feature in bad_record_feature:
+                if non_zero_features[feature].values[0]:
+                    self.advise_word["不良紀錄"].append((f"{feature_chinese[feature]}: {int(user_input[feature]) }次"))
+        else:
+            self.advise_word["不良紀錄"]=[]
 
-# 使用者輸入
-user_input = {}
-for feature in features:
-    value = input(f"請輸入 {feature}: ")
-    user_input[feature] = float(value)  # Assuming the input is numeric, adjust if needed
+        # 改進建議
+        self.advice(customer_features,non_zero_features,good_customer_data)
 
-# 把使用者輸入的資料整理成DataFrame
-new_input_data = pd.DataFrame([user_input])
-
-
-
-
-
-# 預測使用者90天會欠款之機率
-predictions = model.predict(new_input_data[features], num_iteration=model.best_iteration)
-print(f"預測結果 = {predictions[0]}")
-
-# 設定最佳閾值
-threshold = 0.07403868112923592
-
-if predictions[0]<threshold :
-  print(f"建議給此客戶貸款之金額 : {user_input['MonthlyIncome']*15*(1-predictions[0])} ~ {user_input['MonthlyIncome']*22*(1-predictions[0])}")
-  customer_rank_percentage(user_input,threshold)
-else :
-  print('不建議借貸給此用戶')
-  customer_rank_percentage(user_input,threshold)
+        predictions = model.predict(new_input_data[features], num_iteration=model.best_iteration)
+        if predictions[0]<threshold :
+            self.advise_word["建議借貸金額"] =[ user_input['MonthlyIncome']*15*(1-predictions[0]),user_input['MonthlyIncome']*22*(1-predictions[0])]
+            # self.customer_rank_percentage(user_input,threshold)
+        else :
+            self.advise_word["建議借貸金額"]=[0,0]
+            # self.customer_rank_percentage(user_input,threshold)
+        print(f"預測結果 = {predictions[0]}")
+        print(self.advise_word)
+        result = {
+            "RevolvingUtilization_rank": RevolvingUtilization_rank.__round__(2),
+            "same_age_RevolvingUtilization_rank": same_age_RevolvingUtilization_rank.__round__(2),
+            "DebtRatio_rank": DebtRatio_rank.__round__(2),
+            "same_age_DebtRatio_rank": same_age_DebtRatio_rank.__round__(2),
+            "MonthlyIncome_rank": MonthlyIncome_rank.__round__(2),
+            "same_age_MonthlyIncome_rank": same_age_MonthlyIncome_rank.__round__(2),
+            "advice":self.advise_word
+        }
+        return result

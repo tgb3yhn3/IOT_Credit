@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" width="700" prepend-icon="mdi-home">
+  <v-card class="mx-auto" width="700">
     <template v-slot:title> 信用評分系統 </template>
     <v-divider></v-divider>
     <v-card-text>
@@ -11,7 +11,7 @@
                 v-model="credit_ratio"
                 label="信貸比"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
             <!-- </v-row>
@@ -21,7 +21,7 @@
                 v-model="age"
                 label="年齡"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -31,7 +31,7 @@
                 v-model="past_30_59"
                 label="過去兩年,逾期還款30~59天數"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -41,7 +41,7 @@
                 v-model="income_ratio"
                 label="月支出收入比"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
 
@@ -50,7 +50,7 @@
                 v-model="income"
                 label="月收入"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -61,7 +61,7 @@
                 v-model="current_credit_loan_case"
                 label="當前信用貸款案件量"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -72,7 +72,7 @@
                 v-model="past_90"
                 label="過去兩年逾期還款天數90天以上次數"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -83,7 +83,7 @@
                 v-model="current_mortgage_caseload"
                 label="當前抵押貸款案件量"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -94,7 +94,7 @@
                 v-model="past_60_89"
                 label="過去兩年逾期還款60~89天次數"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -105,7 +105,7 @@
                 v-model="famliy_member_num"
                 label="家庭成員數量(不包括自己)"
                 required
-                hide-details
+                
               ></v-text-field>
             </v-col>
           </v-row>
@@ -119,9 +119,21 @@
   <script>
   import axios from 'axios';
 export default {
-  data: () => ({}),
+  data: () => ({
+    credit_ratio: null,
+        age: null,
+        past_30_59: null,
+        income_ratio: null,
+        income:null,
+        current_credit_loan_case: null,
+        past_90: null,
+        current_mortgage_caseload: null,
+        past_60_89: null,
+        famliy_member_num: null,
+  }),
   methods: {
     submitForm: function () {
+      
       console.log("send_form");
       var data = {
         credit_ratio: this.credit_ratio,
@@ -140,17 +152,8 @@ export default {
         .post("http://127.0.0.1:5001/credit", data)
         .then((res) => {
           console.log(res.data);
-          this.$router.push({
-            path: "/advise",
-            query: {
-              credit_ratio: res.data.credit_ratio,
-              income_ratio: res.data.income_ratio,
-              income: res.data.income,
-              same_age_credit_ratio: res.data.same_age_credit_ratio,
-              same_age_income_ratio: res.data.same_age_income_ratio,
-              same_age_income: res.data.same_age_income,
-            },
-          });
+          this.$store.commit("Loaded",res.data)
+         
           // this.$router.push({
           //   path: "/advise",
           //   query: {
@@ -162,9 +165,12 @@ export default {
           //     same_age_income: res.data.same_age_income,
           //   },
           // });
-
+          this.$router.push({
+            path: "/advise",
+            
+          });
         })
-
+        
     },
   },
 };
