@@ -16,7 +16,7 @@ export default defineConfig({
       
       // 带选项写法：http://localhost:5173/api/bar -> http://jsonplaceholder.typicode.com/bar
       '/api': {
-        target: 'http://localhost:5001',
+        target: 'http://127.0.0.1:5001',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

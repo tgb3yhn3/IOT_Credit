@@ -165,7 +165,8 @@ export default {
   
     console.log('created');
     console.log(this.$store.state.data.advice==undefined)
-    const request=await axios
+    if(this.$store.state.data.advice==undefined){
+      const request=await axios
         .get("/api/history/last")
         .then((res) => {
           // console.log(res.data);
@@ -173,8 +174,9 @@ export default {
           // this.$store.state.data=res.data
           this.datas=res.data
         })
-    console.log(request)
-
+    }
+   
+   
   },
   computed: {
     // datas(){
