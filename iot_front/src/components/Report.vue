@@ -15,6 +15,8 @@
                   <th v-for="header in headers" :key="header.value" class="text-left">
                     {{ header.text }}
                   </th>
+                  <th class="text-center"></th> <!-- 添加文本對齊 -->
+
                 </tr>
               </thead>
               <tbody>
@@ -32,6 +34,9 @@
                   <td>{{ item.current_mortgage_caseload }}</td>
                   <td>{{ item.past_60_89 }}</td>
                   <td>{{ item.famliy_member_num }}</td>
+                  <td>
+                    <v-btn small color="#d6e4fa" style="font-size: 17px;" @click="DELETE(item.id)">刪除</v-btn>
+                  </td>
                 </tr>
               </tbody>
             </v-table>
@@ -138,6 +143,27 @@ export default {
       });
   },
   methods: {
+    DELETE(id){
+      axios
+        .delete("http://127.0.0.1:5001/history/"+id)
+        .then((res) => {
+          console.log(res.data);
+          // this.$store.commit("Loaded",res.data)
+         
+          // this.$router.push({
+          //   path: "/advise",
+          //   query: {
+          //     credit_ratio: res.data.credit_ratio,
+          //     income_ratio: res.data.income_ratio,
+          //     income: res.data.income,
+          //     same_age_credit_ratio: res.data.same_age_credit_ratio,
+          //     same_age_income_ratio: res.data.same_age_income_ratio,
+          //     same_age_income: res.data.same_age_income,
+          //   },
+          // });
+          location.reload();
+        })
+    },
     navigateTo(id) {
       axios
         .get("http://127.0.0.1:5001/history/"+id)

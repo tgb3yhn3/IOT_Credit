@@ -62,6 +62,13 @@ def get_history_1(id):
     data=Credit(list(json.loads(last_record.data).values()))
     response = data.customer_rank_percentage()
     return jsonify(response)
+@app.route("/history/<id>", methods=['DELETE'])
+def delete_history(id):
+    
+      
+    last_record = db.session.query(CreditData).filter_by(id=id).delete()
+    db.session.commit()
+    return jsonify("success")
 @app.route("/", methods=['GET'])
 def index():
     return redirect('http://127.0.0.1:3000/')

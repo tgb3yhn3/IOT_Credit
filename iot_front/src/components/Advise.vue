@@ -12,7 +12,7 @@
     <v-card-text>
         <h2 v-if='datas["advice"]["建議借貸金額"][1]!=0'>
             
-            建議借貸金額 {{ Math.round(datas["advice"]["建議借貸金額"][0])}}~{{ Math.round(datas["advice"]["建議借貸金額"][1]) }}
+            建議借貸金額 <span style="font-size:30px"> {{ Math.round(datas["advice"]["建議借貸金額"][0])}}~{{ Math.round(datas["advice"]["建議借貸金額"][1]) }}</span>
         </h2>
         <h2 v-if='datas["advice"]["建議借貸金額"][1]==0'>
             
@@ -207,7 +207,7 @@ export default {
                         dataPoints: [
                             { label: "", y: 100-value, },
 
-                            { label: "你", y: 0 },
+                            { label: "您", y: 0 },
                             { label: "", y: value },
                         ]
                     },],
