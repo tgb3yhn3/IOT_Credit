@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" width="700">
+  <v-card class="mx-auto" width="1200" style="background-color:#FFF8F6;">
     <template v-slot:title> 信用評分系統 </template>
     <v-divider></v-divider>
     <v-card-text>

@@ -1,12 +1,13 @@
 <template>
   <v-container>
+  
     <v-row justify="center">
       <v-col cols="12">
-        <v-card>
+        <v-card class="mx-auto" width="1200" style="background-color:#FFF8F6;border: ;">
           <v-card-title>
             <span class="text-h5">歷史資料</span>
           </v-card-title>
-          <v-card-text>
+          <v-card-text >
             <v-table dense striped class="">
               <thead>
                 <tr>
@@ -19,7 +20,7 @@
               <tbody>
                 <tr v-for="item in desserts" :key="item.age">
                   <td>
-                    <v-btn small color="primary" @click="navigateTo(item.id)">查看</v-btn>
+                    <v-btn small color="#d6e4fa" style="font-size: 17px;" @click="navigateTo(item.id)">查看</v-btn>
                   </td>
                   <td>{{ item.credit_ratio }}</td>
                   <td>{{ item.age }}</td>
@@ -39,8 +40,63 @@
       </v-col>
     </v-row>
   </v-container>
-</template>
 
+</template>
+<style scoped>
+.v-card {
+  /* background-color: red; */
+}
+.v-table{
+  overflow: hidden !important;
+  margin-top: 4%;
+  /* background-color: #FFF; */
+  border: 1px solid #d6e4fa;
+  /* border-bottom: 5px solid #AEC5EB;
+  border-right: 5px solid #AEC5EB;*/
+  border-radius: 20px; 
+}
+
+tbody{
+  
+}
+th{
+  background-color: #c9deff !important;
+  font-weight: 200;
+  font-weight:600;
+  font-weight:bolder !important;
+}
+.table-top{
+  /* background-color: #d6e4fa; */
+
+}
+.b {
+  border:10px solid black;
+}
+h2{
+  padding: 3%;
+  
+    text-align: center;
+  background-color: #d6e4fa;
+  border-bottom: 5px solid #AEC5EB;
+  border-right: 5px solid #AEC5EB;
+  border-radius: 20px;
+  /* font-weight: 200; */
+  
+
+}
+.CanvasJSChart{
+  border: 1px solid #7B7D7D;
+  border-radius: 5%;
+  background-color: #d6e4fa;
+  
+  /* padding: 0; */
+}
+
+.canvasjs-chart-canvas{
+  border: 1px solid black;
+  border-radius: 50%;
+}
+</style>
 <script>
 import axios from 'axios';
 

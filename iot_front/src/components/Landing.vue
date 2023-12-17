@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto" max-width="900">
+    <v-card class="mx-auto" max-width="1200" style="background-color:#FFF8F6;">
         <!-- <v-system-bar
         color="indigo darken-2"
         dark

@@ -3,9 +3,9 @@
   <template #fallback>
     Loading...
   </template>
-  <template #default>
+  <template #default >
    
-  <v-card v-if='datas.advice' class="mx-auto" width="1000"  >
+  <v-card v-if='datas.advice' class="mx-auto" width="1200" style="background-color:#FFF8F6;" >
     
     <template v-slot:title>  評估建議 </template>
     <v-divider></v-divider>
@@ -33,17 +33,17 @@
         </div>
             
         </h2>
-      <v-table fixed-header height="auto">
-        <thead>
+      <v-table  height="auto">
+        <thead class="thead ">
           <tr>
-            <th></th>
-            <th>信貸比</th>
-            <th>月支出收入比</th>
-            <th>月收入</th>
+            <th class="thead"></th>
+            <th class="thead">信貸比</th>
+            <th class="thead">月支出收入比</th>
+            <th class="thead">月收入</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr class="table-top">
             <td>在所有客戶中排名</td>
             <td :style="getCellStyle(datas['RevolvingUtilization_rank'])">
               {{ datas["RevolvingUtilization_rank"] }} %
@@ -55,7 +55,7 @@
               {{ datas["MonthlyIncome_rank"] }} %
             </td>
           </tr>
-          <tr>
+          <tr class="table-top b">
             <td>在所有同齡客戶中排名</td>
             <td
               :style="getCellStyle(datas['same_age_RevolvingUtilization_rank'])"
@@ -69,23 +69,22 @@
               {{ datas["same_age_MonthlyIncome_rank"] }} %
             </td>
           </tr>
-          <tr>
-            <td colspan="4">
-          <v-row > 
+       
+          <!-- <div style=" background-color: #fff !important;"></div> -->
+          
+        </tbody>
+      </v-table>
+<br>
+      <v-row > 
             <v-col
               cols="4"
               v-for="(option, index) in chartOptions"
               :key="index"
+              class="CanvasJSChart"
             >
-              <CanvasJSChart :options="option" />
+              <CanvasJSChart :options="option" class="" />
             </v-col>
           </v-row>
-        </td>
-        </tr>
-        </tbody>
-      </v-table>
-
-      
     </v-card-text>
   </v-card>
  
@@ -93,19 +92,77 @@
 </Suspense>
 </template>
 <style scoped>
-h2{
-    text-align: center;
+
+.v-card {
+  /* background-color: red; */
 }
+.v-table{
+  overflow: hidden !important;
+  margin-top: 4%;
+  /* background-color: #FFF; */
+  /* border: 1px solid black; */
+  border-bottom: 5px solid #AEC5EB;
+  border-right: 5px solid #AEC5EB;
+  border-radius: 20px;
+}
+
+tbody{
+  /* font-size:; */
+}
+th{
+  background-color: #d6e4fa !important;
+  font-weight:600 !important;
+
+  font-size: 20px;
+}
+.table-top{
+  /* background-color: #d6e4fa; */
+  font-size: 20px;
+  font-weight: 200;
+  font-weight:600;
+}
+.b {
+  border:10px solid black;
+}
+h2{
+  padding: 3%;
+  
+    text-align: center;
+  background-color: #d6e4fa;
+  border-bottom: 5px solid #AEC5EB;
+  border-right: 5px solid #AEC5EB;
+  border-radius: 20px;
+
+}
+.CanvasJSChart{
+  border: 2px solid #d6e4fa;
+  border-radius: 5%;
+  background-color: #fff;
+  
+  /* padding: 0; */
+}
+
+.canvasjs-chart-canvas{
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
 </style>
 <script>
 import axios from 'axios';
+import * as CanvasJS from '@canvasjs/charts';
 export default {
   data() {
     return {
       datas: this.$store.state.data
     };
   },
+  created(){
+    CanvasJS.addColorSet("colors1", ["#685044", "#9575CD", "#F9DEC9"]);
+  },
   async  mounted() {
+    
+  
     console.log('created');
     console.log(this.$store.state.data.advice==undefined)
     const request=await axios
@@ -141,15 +198,19 @@ export default {
                     title: {
                         text: titles[key] || key
                     },
+                    backgroundColor: "#fff",
+                    cornerRadius: 4,
+                    colorSet: "colors1",
                     data: [{
                         type: "pyramid",
+                        
                         dataPoints: [
-                            { label: "", y: 100-value },
+                            { label: "", y: 100-value, },
 
                             { label: "你", y: 0 },
                             { label: "", y: value },
                         ]
-                    }]
+                    },],
                 }));
         }
     },
