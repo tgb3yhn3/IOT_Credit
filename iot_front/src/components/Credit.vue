@@ -149,7 +149,7 @@ export default {
       };
       console.log(data);
       axios
-        .post("http://127.0.0.1:5001/credit", data)
+        .post("/api/credit", data)
         .then((res) => {
           console.log(res.data);
           this.$store.commit("Loaded",res.data)

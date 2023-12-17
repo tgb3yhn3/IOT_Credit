@@ -124,7 +124,7 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://127.0.0.1:5001/history')
+    axios.get('/api/history')
       .then((response) => {
         this.desserts = response.data.map(item => {
           let dataObject;
@@ -145,7 +145,7 @@ export default {
   methods: {
     DELETE(id){
       axios
-        .delete("http://127.0.0.1:5001/history/"+id)
+        .delete("/api/history/"+id)
         .then((res) => {
           console.log(res.data);
           // this.$store.commit("Loaded",res.data)
@@ -166,7 +166,7 @@ export default {
     },
     navigateTo(id) {
       axios
-        .get("http://127.0.0.1:5001/history/"+id)
+        .get("/api/history/"+id)
         .then((res) => {
           console.log(res.data);
           this.$store.commit("Loaded",res.data)

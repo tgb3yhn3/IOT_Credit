@@ -166,7 +166,7 @@ export default {
     console.log('created');
     console.log(this.$store.state.data.advice==undefined)
     const request=await axios
-        .get("http://127.0.0.1:5001/history/last")
+        .get("/api/history/last")
         .then((res) => {
           // console.log(res.data);
           // this.$store.commit("Loaded",res.data)
