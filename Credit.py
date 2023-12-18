@@ -33,12 +33,12 @@ class Credit:
             self.advise_word["建議"].append(f"保持良好信用，消除不良紀錄")
         if customer_features['MonthlyIncome'].values[0] < good_customer_data['MonthlyIncome'].mean() :
             self.advise_word["建議"].append(f"建議將月收入提升至 : {good_customer_data['MonthlyIncome'].mean().__round__(2)}以上")
-        if customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0] > good_customer_data['RevolvingUtilizationOfUnsecuredLines'].mean() :
-            self.advise_word["建議"].append(f"建議將貸款信用比降低至 : {good_customer_data['RevolvingUtilizationOfUnsecuredLines'].mean().__round__(2)}以下")
+        if customer_features['RevolvingUtilizationOfUnsecuredLines'].values[0] > good_customer_data['RevolvingUtilizationOfUnsecuredLines'].median() :
+            self.advise_word["建議"].append(f"建議將貸款信用比降低至 : {good_customer_data['RevolvingUtilizationOfUnsecuredLines'].median().__round__(2)}以下")
         if customer_features['DebtRatio'].values[0] > good_customer_data['DebtRatio'].mean() :
             self.advise_word["建議"].append(f"建議將月支出收入比降低至 : {good_customer_data['DebtRatio'].mean().__round__(2)}以下")
         if customer_features['NumberOfOpenCreditLinesAndLoans'].values[0] > good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean() :
-            self.advise_word["建議"].append(f"建議將當前信用貸款案件數量降低至 : {good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean().__round__(2)}以下")
+            self.advise_word["建議"].append(f"建議將當前信用貸款案件數量降低至 : {int(good_customer_data['NumberOfOpenCreditLinesAndLoans'].mean().__round__(2))}以下")
 
 
     def Draw_good_customer_plt(self,good_customer_data):
